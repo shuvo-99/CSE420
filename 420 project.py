@@ -141,31 +141,44 @@ def isNullable(symbol):
   #         break
 
 def find_firstpos(symbol):
-  fl=[]
+  fp=[]
   c1 = symbol - 1
   if modified_regex[c1].isalpha():
     for k,v in firstpos_dict.items():
-      if modified_regex[c1] == v:
-        for i in k:
-          fl.append(i)
-        if tuple(fl) not in firstpos_dict.keys():
-          firstpos_dict[tuple(fl)] = symbol
-          break
-        else:
-          firstpos_dict[tuple(fl)].append(symbol)
-          break
+      for j in v:  
+        if modified_regex[c1] == j:
+          for i in k:
+            fp.append(i)
+          if (tuple(fp) not in firstpos_dict.keys()):
+            firstpos_dict[tuple(fp)] = [modified_regex[symbol]]
+            break
+          else:
+            firstpos_dict[tuple(fp)].append(modified_regex[symbol])
+            break
   # else:
   #   for k,v in firstpos_dict.items():
   #   if modified_regex[c1] == v:
   #     pass
 
 
-def find_lastpos():
-  pass
+def find_lastpos(symbol):
+  lp=[]
+  c1 = symbol - 1
+  if modified_regex[c1].isalpha():
+    for k,v in lastpos_dict.items():
+      for j in v:  
+        if modified_regex[c1] == j:
+          for i in k:
+            lp.append(i)
+          if (tuple(lp) not in lastpos_dict.keys()):
+            lastpos_dict[tuple(lp)] = [modified_regex[symbol]]
+            break
+          else:
+            lastpos_dict[tuple(lp)].append(modified_regex[symbol])
+            break
 
 
-# regex = '(a|b)*abb#'
-regex = 'a*'
+regex = '(a|b)*abb#'
 augmented_regex = augmentation(regex)
 print('augmented_regex = ',augmented_regex)
 
@@ -197,13 +210,14 @@ for k,v in node_dict.items():
     nullable_dict[nullable].append(k)
 
   firstpos.append([k])
-  firstpos_dict[tuple([k])] = v
+  firstpos_dict[tuple([k])] = [v]
   lastpos.append([k])
-  lastpos_dict[tuple([k])] = v
+  lastpos_dict[tuple([k])] = [v]
 
 for i in range(len(modified_regex)):
   isNullable(i)
   find_firstpos(i)
+  find_lastpos(i)
 
 print('\nnullable_dict = ',nullable_dict)
 print('\nfirstpos = ',firstpos)
