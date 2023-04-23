@@ -254,17 +254,51 @@ def find_firstpos(symbol):
   elif modified_regex[symbol] == '.':
     fp=[]
     if ((modified_regex[c1].isalpha()) and (modified_regex[c2].isalpha() or modified_regex[c2] == '#')) :
-      for k,v in node_dict.items():
-        if modified_regex[c1] ==  v:
-          fp.append(k)
-        if modified_regex[c2] == v:
-          fp.append(k)
-          break
-      if (tuple(fp) not in firstpos_dict.keys()):
-        firstpos_dict[tuple(fp)] = [modified_regex[symbol]]
+      # for k,v in node_dict.items():
+      #   if modified_regex[c1] ==  v:
+      #     fp.append(k)
+      #   if modified_regex[c2] == v:
+      #     fp.append(k)
+      #     break
+      # if (tuple(fp) not in firstpos_dict.keys()):
+      #   firstpos_dict[tuple(fp)] = [modified_regex[symbol]]
         
-      else:
-        firstpos_dict[tuple(fp)].append(modified_regex[symbol])
+      # else:
+      #   firstpos_dict[tuple(fp)].append(modified_regex[symbol])
+      for k,v in nullable_dict.items():
+        if modified_regex[c1] in v:
+          if k ==False:
+            for key,value in firstpos_dict.items():
+              for j in value:
+                if '.' == j: 
+                  for z in key:
+                    if z not in fp:
+                      fp.append(z)
+            #   if modified_regex[c2] == value:
+            #     fp.append(key)
+            #     break
+            if (tuple(fp) not in firstpos_dict.keys()):
+              firstpos_dict[tuple(fp)] = [modified_regex[symbol]]
+              
+            else:
+              firstpos_dict[tuple(fp)].append(modified_regex[symbol])
+          else:
+            for key,value in firstpos_dict.items():
+              for j in value:
+                if '.' == j: 
+                  for z in key:
+                    if z not in fp:
+                      fp.append(z)
+                if modified_regex[c2] == j: 
+                  for z in key:
+                    if z not in fp:
+                      fp.append(z)
+            if (tuple(fp) not in firstpos_dict.keys()):
+              firstpos_dict[tuple(fp)] = [modified_regex[symbol]]
+                  
+            else:
+              firstpos_dict[tuple(fp)].append(modified_regex[symbol])
+
     
     else:
       for i in operators:
@@ -374,7 +408,90 @@ def find_lastpos(symbol):
     else:
       lastpos_dict[tuple(lp)].append(modified_regex[symbol])
 
+  elif modified_regex[symbol] == '.':
+    lp=[]
+    if ((modified_regex[c1].isalpha()) and (modified_regex[c2].isalpha() or modified_regex[c2] == '#')) :
+      # for k,v in node_dict.items():
+      #   if modified_regex[c1] ==  v:
+      #     fp.append(k)
+      #   if modified_regex[c2] == v:
+      #     fp.append(k)
+      #     break
+      # if (tuple(fp) not in firstpos_dict.keys()):
+      #   firstpos_dict[tuple(fp)] = [modified_regex[symbol]]
+        
+      # else:
+      #   firstpos_dict[tuple(fp)].append(modified_regex[symbol])
+      for k,v in nullable_dict.items():
+        if modified_regex[c2] in v:
+          if k ==False:
+            for key,value in lastpos_dict.items():
+              for j in value:
+                if '.' == j: 
+                  for z in key:
+                    if z not in lp:
+                      lp.append(z)
+            #   if modified_regex[c2] == value:
+            #     fp.append(key)
+            #     break
+            if (tuple(lp) not in lastpos_dict.keys()):
+              lastpos_dict[tuple(lp)] = [modified_regex[symbol]]
+              
+            else:
+              lastpos_dict[tuple(lp)].append(modified_regex[symbol])
+          else:
+            for key,value in lastpos_dict.items():
+              for j in value:
+                if '.' == j: 
+                  for z in key:
+                    if z not in lp:
+                      lp.append(z)
+                if modified_regex[c2] == j: 
+                  for z in key:
+                    if z not in lp:
+                      lp.append(z)
+            if (tuple(lp) not in lastpos_dict.keys()):
+              lastpos_dict[tuple(lp)] = [modified_regex[symbol]]
+                  
+            else:
+              lastpos_dict[tuple(lp)].append(modified_regex[symbol])
 
+    
+    else:
+      for i in operators:
+        if modified_regex[c2] == i:
+          for k,v in nullable_dict.items():
+            if i in v:
+              if k ==False:
+                for key,value in lastpos_dict.items():
+                  for j in value:
+                    if modified_regex[c1] == j: 
+                      for z in key:
+                        lp.append(z)
+                #   if modified_regex[c2] == value:
+                #     fp.append(key)
+                #     break
+                if (tuple(lp) not in lastpos_dict.keys()):
+                  lastpos_dict[tuple(lp)] = [modified_regex[symbol]]
+                  
+                else:
+                  lastpos_dict[tuple(lp)].append(modified_regex[symbol])
+              else:
+                for key,value in lastpos_dict.items():
+                  for j in value:
+                    if modified_regex[c1] == j: 
+                      for z in key:
+                        if z not in lp:
+                          lp.append(z)
+                    if modified_regex[c2] == j: 
+                      for z in key:
+                        if z not in lp:
+                          lp.append(z)
+                if (tuple(lp) not in lastpos_dict.keys()):
+                  lastpos_dict[tuple(lp)] = [modified_regex[symbol]]
+                      
+                else:
+                  lastpos_dict[tuple(lp)].append(modified_regex[symbol])
 
 regex = '(a|b)*abb#'
 augmented_regex = augmentation(regex)
@@ -414,8 +531,8 @@ for k,v in node_dict.items():
 
 for i in range(len(modified_regex)):
   isNullable(i)
-  # find_firstpos(i)
-  # find_lastpos(i)
+  find_firstpos(i)
+  find_lastpos(i)
 
 print('\nnullable_dict = ',nullable_dict)
 print('\nfirstpos = ',firstpos)
