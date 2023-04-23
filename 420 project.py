@@ -100,29 +100,31 @@ def isNullable(symbol):
     #   else:
     #     nullable_dict[nullable].append('|')
   
-  # if modified_regex[symbol] == '|':
-  #   # c1 = regex.index(symbol)-1
-  #   # c2 = regex.index(symbol)+1
-  #   # print(c1,c2)
-  #   c1 = symbol - 1
-  #   c2 = symbol + 1
-  #   for v in nullable_dict.values():
-  #     if modified_regex[c1] in v or modified_regex[c2] in v:
-  #       nullable = True
-  #       if nullable not in nullable_dict:
-  #         nullable_dict[nullable] = ['|']
-  #         break
-  #       else:
-  #         nullable_dict[nullable].append('|')
-  #         break
-  #     else:
-  #       nullable = False
-  #       if nullable not in nullable_dict:
-  #         nullable_dict[nullable] = ['|']
-  #         break
-  #       else:
-  #         nullable_dict[nullable].append('|')
-  #         break
+  if modified_regex[symbol] == '|':
+    # c1 = regex.index(symbol)-1
+    # c2 = regex.index(symbol)+1
+    # print(c1,c2)
+    c1 = symbol - 1
+    c2 = symbol + 1
+    for k,v in nullable_dict.items():
+
+      if modified_regex[c1] in v or modified_regex[c2] in v:
+        if k ==False:
+          nullable = False
+          if nullable not in nullable_dict:
+            nullable_dict[nullable] = ['|']
+            break
+          else:
+            nullable_dict[nullable].append('|')
+            break
+        else:
+          nullable = True
+          if nullable not in nullable_dict:
+            nullable_dict[nullable] = ['|']
+            break
+          else:
+            nullable_dict[nullable].append('|')
+            break
 
   # if augmented_regex[symbol] == '.':
   #   # c1 = regex.index(symbol)-1
@@ -143,19 +145,22 @@ def isNullable(symbol):
 def find_firstpos(symbol):
   fp=[]
   c1 = symbol - 1
-  if modified_regex[c1].isalpha():
-    for k,v in firstpos_dict.items():
-      for j in v:  
-        if modified_regex[c1] == j:
-          for i in k:
-            fp.append(i)
-          if (tuple(fp) not in firstpos_dict.keys()):
-            firstpos_dict[tuple(fp)] = [modified_regex[symbol]]
-            break
-          else:
-            firstpos_dict[tuple(fp)].append(modified_regex[symbol])
-            break
-  # else:
+  if modified_regex[symbol] == '*':
+    if modified_regex[c1].isalpha():
+      for k,v in firstpos_dict.items():
+        for j in v:  
+          if modified_regex[c1] == j:
+            for i in k:
+              fp.append(i)
+            if (tuple(fp) not in firstpos_dict.keys()):
+              firstpos_dict[tuple(fp)] = [modified_regex[symbol]]
+              break
+            else:
+              firstpos_dict[tuple(fp)].append(modified_regex[symbol])
+              break
+  elif modified_regex[symbol] == '|':
+    pass
+  # else: 
   #   for k,v in firstpos_dict.items():
   #   if modified_regex[c1] == v:
   #     pass
@@ -205,9 +210,9 @@ print('\nnode_dict = ',node_dict)
 for k,v in node_dict.items():
   nullable = False
   if nullable not in nullable_dict:
-    nullable_dict[nullable] = [k]
+    nullable_dict[nullable] = [v]
   else:
-    nullable_dict[nullable].append(k)
+    nullable_dict[nullable].append(v)
 
   firstpos.append([k])
   firstpos_dict[tuple([k])] = [v]
@@ -216,8 +221,8 @@ for k,v in node_dict.items():
 
 for i in range(len(modified_regex)):
   isNullable(i)
-  find_firstpos(i)
-  find_lastpos(i)
+  # find_firstpos(i)
+  # find_lastpos(i)
 
 print('\nnullable_dict = ',nullable_dict)
 print('\nfirstpos = ',firstpos)
