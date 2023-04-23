@@ -58,23 +58,35 @@ def augmentation(re):
 def node_no(symbol):
   quantify_no = 0
   global node
-  if regex[symbol].isalpha() or regex[symbol] == '#':
+  if augmented_regex[symbol].isalpha() or augmented_regex[symbol] == '#':
     node += 1
-    node_dict[node] = regex[symbol]
+    node_dict[node] = augmented_regex[symbol]
   # if symbol is in '*+|.'
 
 def isNullable(symbol):
   
-  if regex[symbol].isalpha() or regex[symbol] == '#':
+  if augmented_regex[symbol].isalpha() or augmented_regex[symbol] == '#':
     nullable = False
     if nullable not in nullable_dict:
-      nullable_dict[nullable] = [regex[symbol]]
+      nullable_dict[nullable] = [augmented_regex[symbol]]
     else:
-      nullable_dict[nullable].append(regex[symbol])
+      nullable_dict[nullable].append(augmented_regex[symbol])
   
-  if regex[symbol] == 'ε':
+  if augmented_regex[symbol] == 'ε':
     nullable = True
-    nullable_dict[nullable].append(regex[symbol])
+    # nullable_dict[nullable].append(augmented_regex[symbol])\
+    if nullable not in nullable_dict:
+      nullable_dict[nullable] = ['ε']  
+    else:
+      nullable_dict[nullable].append('ε')
+          
+
+  if augmented_regex[symbol] == '*':
+    nullable = True
+    if nullable not in nullable_dict:
+      nullable_dict[nullable] = ['*']  
+    else:
+      nullable_dict[nullable].append('*')
   
   # if symbol == '|':
   #   c1 = regex.index(symbol)-1
@@ -89,14 +101,14 @@ def isNullable(symbol):
   #     else:
   #       nullable_dict[nullable].append('|')
   
-  if regex[symbol] == '|':
+  if augmented_regex[symbol] == '|':
     # c1 = regex.index(symbol)-1
     # c2 = regex.index(symbol)+1
     # print(c1,c2)
     c1 = symbol - 1
     c2 = symbol + 1
     for v in nullable_dict.values():
-      if regex[c1] in v or regex[c2] in v:
+      if augmented_regex[c1] in v or augmented_regex[c2] in v:
         nullable = True
         if nullable not in nullable_dict:
           nullable_dict[nullable] = ['|']
@@ -104,22 +116,30 @@ def isNullable(symbol):
         else:
           nullable_dict[nullable].append('|')
           break
-  
-  if regex[symbol] == '.':
-    # c1 = regex.index(symbol)-1
-    # c2 = regex.index(symbol)+1
-    # print(c1,c2)
-    c1 = symbol - 1
-    c2 = symbol + 1
-    for v in nullable_dict.values():
-      if regex[c1] in v and regex[c2] in v:
-        nullable = True
+      else:
+        nullable = False
         if nullable not in nullable_dict:
-          nullable_dict[nullable] = ['.']
+          nullable_dict[nullable] = ['|']
           break
         else:
-          nullable_dict[nullable].append('.')
+          nullable_dict[nullable].append('|')
           break
+  
+  # if augmented_regex[symbol] == '.':
+  #   # c1 = regex.index(symbol)-1
+  #   # c2 = regex.index(symbol)+1
+  #   # print(c1,c2)
+  #   c1 = symbol - 1
+  #   c2 = symbol + 1
+  #   for v in nullable_dict.values():
+  #     if augmented_regex[c1] in v and augmented_regex[c2] in v:
+  #       nullable = True
+  #       if nullable not in nullable_dict:
+  #         nullable_dict[nullable] = ['.']
+  #         break
+  #       else:
+  #         nullable_dict[nullable].append('.')
+  #         break
 
 
 
@@ -135,7 +155,7 @@ nullable = False
 nullable_dict = {}
 
 
-for i in range(len(regex)):
+for i in range(len(augmented_regex)):
   node_no(i)
   isNullable(i)
 
