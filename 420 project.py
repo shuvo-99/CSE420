@@ -104,6 +104,7 @@ def isNullable(symbol):
     # c1 = regex.index(symbol)-1
     # c2 = regex.index(symbol)+1
     # print(c1,c2)
+    operators.append('|')
     c1 = symbol - 1
     c2 = symbol + 1
     for k,v in nullable_dict.items():
@@ -143,29 +144,43 @@ def isNullable(symbol):
   #         break
 
 def find_firstpos(symbol):
-  fp=[]
+  
   c1 = symbol - 1
   c2 = symbol + 1
-  if modified_regex[symbol] == '*':
-    if modified_regex[c1].isalpha():
-      for k,v in firstpos_dict.items():
-        for j in v:  
-          if modified_regex[c1] == j:
-            for i in k:
-              fp.append(i)
-            if (tuple(fp) not in firstpos_dict.keys()):
-              firstpos_dict[tuple(fp)] = [modified_regex[symbol]]
-              break
-            else:
-              firstpos_dict[tuple(fp)].append(modified_regex[symbol])
-              break
+
+  # if modified_regex[symbol] == '*':
+  #   fp=[]
+  #   if modified_regex[c1].isalpha():
+  #     for k,v in firstpos_dict.items():
+  #       for j in v:  
+  #         if modified_regex[c1] == j:
+  #           for i in k:
+  #             fp.append(i)
+  #           if (tuple(fp) not in firstpos_dict.keys()):
+  #             firstpos_dict[tuple(fp)] = [modified_regex[symbol]]
+  #             break
+  #           else:
+  #             firstpos_dict[tuple(fp)].append(modified_regex[symbol])
+  #             break
+  #   else:
+  #     for i in operators:
+  #       if modified_regex[c1] == i:
   
-  elif modified_regex[symbol] == '|':
+
+  if modified_regex[symbol] == '|':
+    fp=[]
     for k,v in node_dict.items():
       if modified_regex[c1] ==  v:
         fp.append(k)
-      if modified_regex[c2] in v:
+      if modified_regex[c2] == v:
         fp.append(k)
+        break
+    if (tuple(fp) not in firstpos_dict.keys()):
+      firstpos_dict[tuple(fp)] = [modified_regex[symbol]]
+      
+    else:
+      firstpos_dict[tuple(fp)].append(modified_regex[symbol])
+      
 
 
       
@@ -176,20 +191,37 @@ def find_firstpos(symbol):
 
 
 def find_lastpos(symbol):
-  lp=[]
+  
   c1 = symbol - 1
-  if modified_regex[c1].isalpha():
-    for k,v in lastpos_dict.items():
-      for j in v:  
-        if modified_regex[c1] == j:
-          for i in k:
-            lp.append(i)
-          if (tuple(lp) not in lastpos_dict.keys()):
-            lastpos_dict[tuple(lp)] = [modified_regex[symbol]]
-            break
-          else:
-            lastpos_dict[tuple(lp)].append(modified_regex[symbol])
-            break
+  c2 = symbol + 1
+  # if modified_regex[symbol] == '*':
+  #   if modified_regex[c1].isalpha():
+  #     for k,v in lastpos_dict.items():
+  #       for j in v:  
+  #         if modified_regex[c1] == j:
+  #           for i in k:
+  #             lp.append(i)
+  #           if (tuple(lp) not in lastpos_dict.keys()):
+  #             lastpos_dict[tuple(lp)] = [modified_regex[symbol]]
+  #             break
+  #           else:
+  #             lastpos_dict[tuple(lp)].append(modified_regex[symbol])
+  #             break
+  
+  if modified_regex[symbol] == '|':
+    lp=[]
+    for k,v in node_dict.items():
+      if modified_regex[c1] ==  v:
+        lp.append(k)
+      if modified_regex[c2] == v:
+        lp.append(k)
+        break
+    if (tuple(lp) not in lastpos_dict.keys()):
+      lastpos_dict[tuple(lp)] = [modified_regex[symbol]]
+      
+    else:
+      lastpos_dict[tuple(lp)].append(modified_regex[symbol])
+
 
 
 regex = '(a|b)*abb#'
@@ -230,8 +262,8 @@ for k,v in node_dict.items():
 
 for i in range(len(modified_regex)):
   isNullable(i)
-  # find_firstpos(i)
-  # find_lastpos(i)
+  find_firstpos(i)
+  find_lastpos(i)
 
 print('\nnullable_dict = ',nullable_dict)
 print('\nfirstpos = ',firstpos)
