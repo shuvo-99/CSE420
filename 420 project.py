@@ -145,6 +145,7 @@ def isNullable(symbol):
 def find_firstpos(symbol):
   fp=[]
   c1 = symbol - 1
+  c2 = symbol + 1
   if modified_regex[symbol] == '*':
     if modified_regex[c1].isalpha():
       for k,v in firstpos_dict.items():
@@ -158,8 +159,16 @@ def find_firstpos(symbol):
             else:
               firstpos_dict[tuple(fp)].append(modified_regex[symbol])
               break
+  
   elif modified_regex[symbol] == '|':
-    pass
+    for k,v in node_dict.items():
+      if modified_regex[c1] ==  v:
+        fp.append(k)
+      if modified_regex[c2] in v:
+        fp.append(k)
+
+
+      
   # else: 
   #   for k,v in firstpos_dict.items():
   #   if modified_regex[c1] == v:
