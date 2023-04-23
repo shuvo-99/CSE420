@@ -148,26 +148,37 @@ def find_firstpos(symbol):
   c1 = symbol - 1
   c2 = symbol + 1
 
-  # if modified_regex[symbol] == '*':
-  #   fp=[]
-  #   if modified_regex[c1].isalpha():
-  #     for k,v in firstpos_dict.items():
-  #       for j in v:  
-  #         if modified_regex[c1] == j:
-  #           for i in k:
-  #             fp.append(i)
-  #           if (tuple(fp) not in firstpos_dict.keys()):
-  #             firstpos_dict[tuple(fp)] = [modified_regex[symbol]]
-  #             break
-  #           else:
-  #             firstpos_dict[tuple(fp)].append(modified_regex[symbol])
-  #             break
-  #   else:
-  #     for i in operators:
-  #       if modified_regex[c1] == i:
+  if modified_regex[symbol] == '*':
+    fp=[]
+    if modified_regex[c1].isalpha():
+      for k,v in firstpos_dict.items():
+        for j in v:  
+          if modified_regex[c1] == j:
+            for i in k:
+              fp.append(i)
+            if (tuple(fp) not in firstpos_dict.keys()):
+              firstpos_dict[tuple(fp)] = [modified_regex[symbol]]
+              break
+            else:
+              firstpos_dict[tuple(fp)].append(modified_regex[symbol])
+              break
+    elif modified_regex[c1-3] == '|':
+      fp=[]
+      for k,v in firstpos_dict.items():
+        for j in v:  
+          if '|' == j:
+            for i in k:
+              fp.append(i)
+            if (tuple(fp) not in firstpos_dict.keys()):
+              firstpos_dict[tuple(fp)] = [modified_regex[symbol]]
+              break
+            else:
+              firstpos_dict[tuple(fp)].append(modified_regex[symbol])
+              break
+
   
 
-  if modified_regex[symbol] == '|':
+  elif modified_regex[symbol] == '|':
     fp=[]
     for k,v in node_dict.items():
       if modified_regex[c1] ==  v:
