@@ -89,17 +89,17 @@ def isNullable(symbol):
       nullable_dict[nullable].append('*')
   
   # if symbol == '|':
-  #   c1 = regex.index(symbol)-1
-  #   c2 = regex.index(symbol)+1
-  #   # print(c1,c2)
-  #   # for v in nullable_dict.values():
-  #   if (regex[c1] in nullable_dict.values()) or (regex[c2] in nullable_dict.values()):
-  #     print('yes')
-  #     nullable = True
-  #     if nullable not in nullable_dict.keys():
-  #       nullable_dict[nullable] = ['|']
-  #     else:
-  #       nullable_dict[nullable].append('|')
+    c1 = regex.index(symbol)-1
+    c2 = regex.index(symbol)+1
+    # print(c1,c2)
+    # for v in nullable_dict.values():
+    if (regex[c1] in nullable_dict.values()) or (regex[c2] in nullable_dict.values()):
+      print('yes')
+      nullable = True
+      if nullable not in nullable_dict.keys():
+        nullable_dict[nullable] = ['|']
+      else:
+        nullable_dict[nullable].append('|')
   
   if augmented_regex[symbol] == '|':
     # c1 = regex.index(symbol)-1
@@ -157,10 +157,15 @@ nullable_dict = {}
 
 for i in range(len(augmented_regex)):
   node_no(i)
-  isNullable(i)
-
+  # isNullable(i)
 
 print(node_dict)
+for v in node_dict.values():
+  nullable = False
+  if nullable not in nullable_dict:
+    nullable_dict[nullable] = [v]
+  else:
+    nullable_dict[nullable].append(v)
 print(nullable_dict)
 
 
