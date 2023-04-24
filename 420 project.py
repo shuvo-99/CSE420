@@ -529,6 +529,13 @@ def find_lastpos(symbol):
                 else:
                   lastpos_dict[tuple(lp)].append(modified_regex[symbol])
                 # print(lastpos_dict)
+
+
+def find_followpos(symbol):
+  if modified_regex[symbol] == '*':
+    
+  pass
+
 regex = '(a|b)*abb#'
 augmented_regex = augmentation(regex)
 print('augmented_regex = ',augmented_regex)
@@ -544,6 +551,7 @@ nullable = False
 nullable_dict = {}
 firstpos_dict = {}
 lastpos_dict = {}
+followpos_dict = {}
 firstpos=[]
 lastpos=[]
 operators = []
@@ -570,6 +578,9 @@ for i in range(len(modified_regex)):
   find_firstpos(i)
   find_lastpos(i)
 
+for i in range(len(modified_regex)):
+  find_followpos(i)
+
 
 print('\nnullable_dict = ',nullable_dict)
 print('\nfirstpos = ',firstpos)
@@ -583,7 +594,7 @@ for k,v in firstpos_dict.items():
         if modified_regex[-2] == i:
             fpos = str(k)
         
-print('\nfirstpos of the regular expression = ',fpos[1:-1])
+print('\nfirstpos of the regular expression = '+'{'+fpos[1:-1]+'}')
 
 lpos=''
 for k,v in lastpos_dict.items():
@@ -591,7 +602,7 @@ for k,v in lastpos_dict.items():
         if modified_regex[-2] == i:
             lpos = str(k)
         
-print('\nlastpos of the regular expression = ',lpos[1:-2])
+print('\nlastpos of the regular expression = '+'{'+lpos[1:-2]+'}')
 
 
 
