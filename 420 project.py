@@ -574,11 +574,20 @@ def find_followpos(symbol):
         if i.isalpha() or i=='#':
           modre.append(i)
       # print(modre)
-      for i in range(len(modre)):
-        if modre[i] == modified_regex[c1]:
-          c1Index = i+1
-        if modre[i] == modified_regex[c2]:
-          c2Index = i+1
+      if modified_regex[c1] != modified_regex[c2]:
+        for i in range(len(modre)):
+          if modre[i] == modified_regex[c1]:
+            c1Index = i+1
+          if modre[i] == modified_regex[c2]:
+            c2Index = i+1
+      else:
+        for i in range(len(modre)-1):
+          if modre[i] == modified_regex[c1]:
+            c1Index = i+1
+        for i in range(len(modre)):  
+          if modre[i] == modified_regex[c2]:
+            c2Index = i+1
+
         
       # print(c1Index)
       # print(c2Index)
