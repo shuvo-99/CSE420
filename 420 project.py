@@ -661,10 +661,10 @@ def find_followpos(symbol):
 
 regex = '(a|b)*abb#'
 augmented_regex = augmentation(regex)
-print('augmented_regex = ',augmented_regex)
+# print('augmented_regex = ',augmented_regex)
 
 modified_regex = regex_modify(augmented_regex)
-print('\nmodified_regex = ',modified_regex)
+# print('\nmodified_regex = ',modified_regex)
 
 # rex = ''
 node = 0
@@ -681,9 +681,9 @@ operators = []
 
 for i in range(len(augmented_regex)):
   node_no(i)
-  # isNullable(i)
+  
 
-print('\nnode_dict = ',node_dict)
+# print('\nnode_dict = ',node_dict)
 for k,v in node_dict.items():
   nullable = False
   if nullable not in nullable_dict:
@@ -701,11 +701,14 @@ for i in range(len(modified_regex)):
   find_firstpos(i)
   find_lastpos(i)
 
-print('\nnullable_dict = ',nullable_dict)
-print('\nfirstpos = ',firstpos)
-print('\nfirstpos_dict = ',firstpos_dict)
-print('\nlastpos = ',lastpos)
-print('\nlastpos_dict = ',lastpos_dict)
+# print('\nnullable_dict = ',nullable_dict)
+# print('\nfirstpos = ',firstpos)
+# print('\nfirstpos_dict = ',firstpos_dict)
+# print('\nlastpos = ',lastpos)
+# print('\nlastpos_dict = ',lastpos_dict)
+
+for i in range(len(modified_regex)):
+  find_followpos(i)
 
 fpos=''
 for k,v in firstpos_dict.items():
@@ -723,9 +726,24 @@ for k,v in lastpos_dict.items():
         
 print('\nlastpos of the regular expression = '+'{'+lpos[1:-2]+'}')
 
-for i in range(len(modified_regex)):
-  find_followpos(i)
-print(followpos_dict)
+print('\nfollowpos_dict = ',followpos_dict)
+# print('\n---- |','---------')
+# print('Node |','Followpos')
+# print('---- |','---------')
+
+# fopos = ''
+# for k,v in followpos_dict.items():
+#   if len(v)>1:
+#     fopos = ''
+#     for i in v:
+#       fopos += str(i)+', '
+#     # print(fopos)
+#     print('  '+str(k)+'  |'+' {'+fopos[0:-1]+'}')
+#     print('---- |','---------')
+
+#   else:
+#     print('  '+str(k)+'  |'+' {'+str(v[0])+'}')
+#     print('---- |','---------')
 
 
 
