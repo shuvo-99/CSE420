@@ -532,9 +532,29 @@ def find_lastpos(symbol):
 
 
 def find_followpos(symbol):
+  lop = []
+  fop = []
   if modified_regex[symbol] == '*':
-    
-  pass
+    for k,v in lastpos_dict.items():
+      for i in v:
+        if modified_regex[symbol] == i:
+          for j in k:
+            fop.append(j)
+    for key, val in firstpos_dict.items():
+      for i in val:
+        if modified_regex[symbol] == i:
+          for j in key:
+            lop.append(j)
+    for i in lop:
+      for j in fop:
+        # followpos_dict[i] = j
+        if (i not in followpos_dict.keys()):
+          followpos_dict[i] = [j]
+              
+        else:
+          followpos_dict[i].append(j)
+
+  
 
 regex = '(a|b)*abb#'
 augmented_regex = augmentation(regex)
@@ -578,10 +598,6 @@ for i in range(len(modified_regex)):
   find_firstpos(i)
   find_lastpos(i)
 
-for i in range(len(modified_regex)):
-  find_followpos(i)
-
-
 print('\nnullable_dict = ',nullable_dict)
 print('\nfirstpos = ',firstpos)
 print('\nfirstpos_dict = ',firstpos_dict)
@@ -604,7 +620,9 @@ for k,v in lastpos_dict.items():
         
 print('\nlastpos of the regular expression = '+'{'+lpos[1:-2]+'}')
 
-
+for i in range(len(modified_regex)):
+  find_followpos(i)
+print(followpos_dict)
 
 
 
