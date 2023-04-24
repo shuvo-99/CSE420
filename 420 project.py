@@ -401,12 +401,22 @@ def find_lastpos(symbol):
   # '|' condition         
   elif modified_regex[symbol] == '|':
     lp=[]
+    
     for k,v in node_dict.items():
       if modified_regex[c1] ==  v:
+        lp2=[]
         lp.append(k)
-        
+        # lp2.append(False)
+        lp2.append(k)
+        # lastpos_dict[tuple(lp2)] = [v]
+        lastpos_dict.pop(tuple(lp2))
       if modified_regex[c2] == v:
+        lp2=[]
         lp.append(k)
+        # lp2.append(False)
+        lp2.append(k)
+        # lastpos_dict[tuple(lp2)] = [v]
+        lastpos_dict.pop(tuple(lp2))
         break
     if (tuple(lp) not in lastpos_dict.keys()):
       lastpos_dict[tuple(lp)] = [modified_regex[symbol]]
@@ -436,9 +446,12 @@ def find_lastpos(symbol):
             for key,value in lastpos_dict.items():
               for j in value:
                 if modified_regex[c2] == j: 
+                  lp2=[]
                   for z in key:
                     if z not in lp:
                       lp.append(z)
+                      lp2.append(z)
+            lastpos_dict.pop(tuple(lp2))
             #   if modified_regex[c2] == value:
             #     fp.append(key)
             #     break
@@ -447,7 +460,7 @@ def find_lastpos(symbol):
               
             else:
               lastpos_dict[tuple(lp)].append(modified_regex[symbol])
-            print(lastpos_dict)
+            # print(lastpos_dict)
           else:
             for key,value in lastpos_dict.items():
               for j in value:
@@ -464,7 +477,7 @@ def find_lastpos(symbol):
                   
             else:
               lastpos_dict[tuple(lp)].append(modified_regex[symbol])
-            print(lastpos_dict)
+            # print(lastpos_dict)
     
     else:
       # for i in operators:
@@ -475,36 +488,46 @@ def find_lastpos(symbol):
             for key,value in lastpos_dict.items():
               for j in value:
                 if modified_regex[c2] == j: 
+                  lp2=[]
                   for z in key:
                     lp.append(z)
+                    lp2.append(z)
             #   if modified_regex[c2] == value:
             #     fp.append(key)
             #     break
+            lastpos_dict.pop(tuple(lp2))
             if (tuple(lp) not in lastpos_dict.keys()):
               lastpos_dict[tuple(lp)] = [modified_regex[symbol]]
               
             else:
               lastpos_dict[tuple(lp)].append(modified_regex[symbol])
-            print(lastpos_dict)
+            # print(lastpos_dict)
           else:
             for i in operators:
               if modified_regex[c1] == i:
                 for key,value in lastpos_dict.items():
                   for j in value:
-                    if modified_regex[c1] == j: 
+                    if modified_regex[c1] == j:
+                      lp2=[]
                       for z in key:
                         if z not in lp:
                           lp.append(z)
+                          lp2.append(z)
+                    lastpos_dict.pop(tuple(lp2))
                     if modified_regex[c2] == j: 
+                      lp3=[]
                       for z in key:
                         if z not in lp:
                           lp.append(z)
+                          lp3.append(z)
+                lastpos_dict.pop(tuple(lp2))
+                lastpos_dict.pop(tuple(lp3))
                 if (tuple(lp) not in lastpos_dict.keys()):
                   lastpos_dict[tuple(lp)] = [modified_regex[symbol]]
                       
                 else:
                   lastpos_dict[tuple(lp)].append(modified_regex[symbol])
-                print(lastpos_dict)
+                # print(lastpos_dict)
 regex = '(a|b)*abb#'
 augmented_regex = augmentation(regex)
 print('augmented_regex = ',augmented_regex)
@@ -552,7 +575,29 @@ print('\nfirstpos_dict = ',firstpos_dict)
 print('\nlastpos = ',lastpos)
 print('\nlastpos_dict = ',lastpos_dict)
 
+fpos=''
+for k,v in firstpos_dict.items():
+    for i in v:
+        if modified_regex[-2] == i:
+            fpos = str(k)
+        
+print('\nfirstpos of the regular expression = ',fpos[1:-1])
 
+lpos=''
+for k,v in lastpos_dict.items():
+    for i in v:
+        if modified_regex[-2] == i:
+            lpos = str(k)
+        
+print('\nfirstpos of the regular expression = ',lpos[1:-2])
+
+
+
+
+
+        
+    
+    
 
 # class Node:
 #   def __init__(self, value=None, left=None, right=None): 
