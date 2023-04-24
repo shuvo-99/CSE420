@@ -532,19 +532,20 @@ def find_lastpos(symbol):
 
 
 def find_followpos(symbol):
-  lop = []
-  fop = []
+  
   if modified_regex[symbol] == '*':
+    lop = []
+    fop = []
     for k,v in lastpos_dict.items():
       for i in v:
         if modified_regex[symbol] == i:
           for j in k:
-            fop.append(j)
+            lop.append(j)
     for key, val in firstpos_dict.items():
       for i in val:
         if modified_regex[symbol] == i:
           for j in key:
-            lop.append(j)
+            fop.append(j)
     for i in lop:
       for j in fop:
         # followpos_dict[i] = j
@@ -553,6 +554,51 @@ def find_followpos(symbol):
               
         else:
           followpos_dict[i].append(j)
+
+  elif modified_regex[symbol] == '.':
+    
+    c1 = symbol - 1
+    c2 = symbol + 1
+    if modified_regex[c1].isalpha() and (modified_regex[c2].isalpha() or modified_regex[c2] == '#' ):
+      lop = []
+      fop = []
+      pass
+    
+    elif not modified_regex[c1].isalpha():
+      lop = []
+      fop = []
+      for i in operators:
+        if (modified_regex[c1] == i) or(modified_regex[c1-1] == i):
+          for k,v in lastpos_dict.items():
+            for i in v:
+              if modified_regex[c1] == i:
+                for j in k:
+                  if j not in lop:
+                    lop.append(j)
+          for key, val in firstpos_dict.items():
+            for i in val:
+              if modified_regex[c2] == i:
+                for j in key:
+                  if j not in fop:
+                    fop.append(j)
+          for i in lop:
+            for j in fop:
+              # followpos_dict[i] = j
+              if (i not in followpos_dict.keys()):
+                
+                  followpos_dict[i] = [j]
+                    
+              else:
+                for v in followpos_dict.values():
+                  # print(v)
+                  if j not in v: 
+                    print(j)
+                    followpos_dict[i].append(j)
+            
+
+
+          
+
 
   
 
