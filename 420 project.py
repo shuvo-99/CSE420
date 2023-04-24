@@ -425,6 +425,8 @@ def find_lastpos(symbol):
       lastpos_dict[tuple(lp)].append(modified_regex[symbol])
 
 
+
+
   # '.' condition 
   elif modified_regex[symbol] == '.':
     lp=[]
@@ -533,6 +535,7 @@ def find_lastpos(symbol):
 
 def find_followpos(symbol):
   
+  # '*' condition 
   if modified_regex[symbol] == '*':
     lop = []
     fop = []
@@ -555,15 +558,60 @@ def find_followpos(symbol):
         else:
           followpos_dict[i].append(j)
 
+
+  # '.' condition 
   elif modified_regex[symbol] == '.':
     
     c1 = symbol - 1
     c2 = symbol + 1
+
+    # both child are alphabet
     if modified_regex[c1].isalpha() and (modified_regex[c2].isalpha() or modified_regex[c2] == '#' ):
+
+      modre = []
+      mod = modified_regex[:c2+1]
+      for i in mod:
+        if i.isalpha() or i=='#':
+          modre.append(i)
+      # print(modre)
+      for i in range(len(modre)):
+        if modre[i] == modified_regex[c1]:
+          c1Index = i+1
+        if modre[i] == modified_regex[c2]:
+          c2Index = i+1
+        
+      # print(c1Index)
+      # print(c2Index)
       lop = []
       fop = []
-      pass
+      lop.append(c1Index)
+      fop.append(c2Index)
+      # for k,v in node_dict.items():
+      #   # print(v)
+      #   if modified_regex[c1] == v:
+      #     lop.append(k)
+      # # print(lop)
+      # for key, val in firstpos_dict.items():
+      #       for i in val:
+      #         if modified_regex[c2] == i:
+      #           for j in key:
+      #             if j not in fop:
+      #               fop.append(j)
+      for i in lop:
+        for j in fop:
+          # followpos_dict[i] = j
+          if (i not in followpos_dict.keys()):
+            
+              followpos_dict[i] = [j]
+                
+          else:
+            if j not in followpos_dict[i]:
+              # print(v)
+              # if j not in v: 
+              #   print(j)
+              followpos_dict[i].append(j)
     
+    # 1st child is non-alphabet
     elif not modified_regex[c1].isalpha():
       lop = []
       fop = []
