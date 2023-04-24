@@ -472,6 +472,7 @@ def find_lastpos(symbol):
                   for z in key:
                     if z not in lp:
                       lp.append(z)
+                  
             if (tuple(lp) not in lastpos_dict.keys()):
               lastpos_dict[tuple(lp)] = [modified_regex[symbol]]
                   
@@ -569,6 +570,7 @@ for i in range(len(modified_regex)):
   find_firstpos(i)
   find_lastpos(i)
 
+
 print('\nnullable_dict = ',nullable_dict)
 print('\nfirstpos = ',firstpos)
 print('\nfirstpos_dict = ',firstpos_dict)
@@ -589,7 +591,7 @@ for k,v in lastpos_dict.items():
         if modified_regex[-2] == i:
             lpos = str(k)
         
-print('\nfirstpos of the regular expression = ',lpos[1:-2])
+print('\nlastpos of the regular expression = ',lpos[1:-2])
 
 
 
