@@ -589,11 +589,11 @@ def find_followpos(symbol):
                   followpos_dict[i] = [j]
                     
               else:
-                for v in followpos_dict.values():
+                if j not in followpos_dict[i]:
                   # print(v)
-                  if j not in v: 
-                    print(j)
-                    followpos_dict[i].append(j)
+                  # if j not in v: 
+                  #   print(j)
+                  followpos_dict[i].append(j)
             
 
 
